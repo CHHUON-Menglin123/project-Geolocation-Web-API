@@ -4,7 +4,9 @@ const Datastore = require('nedb');
 
 const app = express();
 
-const port = parseInt(process.env.PORT) || process.argv[3] || 8080;
+const port = process.env.PORT ||  8080;
+app.listen(port, () => {
+  console.log(`Listening on http://localhost:${port}`);
 
 app.use(express.static(path.join(__dirname, 'public')))
   .set('views', path.join(__dirname, 'views'))
@@ -17,9 +19,6 @@ app.get('/', (req, res) => {
 app.get('/api', (req, res) => {
   res.json({"msg": "Hi Dad"});
 });
-
-app.listen(3000, () => {
-  console.log(`Listening on http://localhost:3000`);
 })
 app.use(express.static('public'));
 app.use(express.json());
