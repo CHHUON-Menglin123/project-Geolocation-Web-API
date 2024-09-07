@@ -1,10 +1,71 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Data Selfie App</title>
+  </head>
     <title> Document </title>
 <head>
     <link rel="stylesheet" type="text/css" href="/styles.css" />
 </head>
 <body>
+    <script>
+        if ('geolocation' in navigator){
+            console.log('geolocation available');
+            navigator.geolocation.getCurrentPosition(async position =>{
+               const lat = position.coords.latitudee;
+               const lon = position.coords.longitude;
+               document.getElementById('latitude').textContent = lat;
+               document.getElementById('longitude').textContent = lon;
+               //console.log(position);
+
+               const data = {lat, lon};
+               const options = {
+                methods: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+               };
+                const repsonse = await fetch('/api', options);
+                const dt = await respose.json();
+                console.log(dt);
+            });
+        } 
+          else{
+            console.log('geolocation not available');
+        }
+        
+    </script>
     <h1>Data Selfie App</h1>
+
+    <script>
+    getData();
+    async function getData() {
+        const response = await fetch('/api');
+        const data = await response.json();
+        
+        for ( item of data) {
+            const root = document.createElement('div');
+            const mood = document.createElement('div');
+            const geo = document.createElement('div');
+            const date = document.createElement('div');
+
+          
+            mood.textContent = 'mood: ${item.mood}';
+            geo.textContent = 'geo: ${item.geo}';
+        
+            date.textContent = 'date: ${item.date}';
+            const dateString = new Date(item.timeRecording).toLocaleString();
+            date.textContent = dateString;
+            root.append(mood, geo, date);
+            document.body.append(root);  
+        }
+        console.log(data);
+    }
+
+    </script>
 </body>
 </html>
